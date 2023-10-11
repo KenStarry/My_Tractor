@@ -23,10 +23,17 @@ class _MapScreenState extends State<MapScreen> {
     _mapController = Completer();
   }
 
+  //  get polyline points
+
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
         initialCameraPosition:
-            CameraPosition(target: sourceLocation, zoom: 14.5));
+            const CameraPosition(target: sourceLocation, zoom: 13.0),
+        markers: {
+          const Marker(markerId: MarkerId("source"), position: sourceLocation),
+          const Marker(
+              markerId: MarkerId("destination"), position: destination),
+        });
   }
 }
