@@ -31,10 +31,10 @@ class _MapScreenState extends State<MapScreen> {
     getPolylinePoints();
   }
 
-  Future<LocationData> getCurrentLocation() async {
+  Stream<LocationData> getCurrentLocation() {
     Location location = Location();
 
-    return location.getLocation();
+    return location.onLocationChanged;
   }
 
   //  get polyline points
@@ -58,8 +58,8 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: FutureBuilder(
-          future: getCurrentLocation(),
+      body: StreamBuilder(
+          stream: getCurrentLocation(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
