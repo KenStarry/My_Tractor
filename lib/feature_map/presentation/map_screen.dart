@@ -11,7 +11,6 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-
   late final Completer<GoogleMapController> _mapController;
 
   static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
@@ -26,6 +25,8 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return GoogleMap(
+        initialCameraPosition:
+            CameraPosition(target: sourceLocation, zoom: 14.5));
   }
 }
