@@ -54,7 +54,9 @@ class _MapScreenState extends State<MapScreen> {
         polylines: {
           Polyline(
               polylineId: const PolylineId("route"),
-              points: polylineCoordinates)
+              points: polylineCoordinates,
+              color: Theme.of(context).primaryColor,
+              width: 5)
         },
         markers: {
           const Marker(markerId: MarkerId("source"), position: sourceLocation),
