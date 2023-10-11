@@ -42,6 +42,7 @@ class _MapScreenState extends State<MapScreen> {
       for (var point in route.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
+      setState(() {});
     }
   }
 
@@ -50,6 +51,11 @@ class _MapScreenState extends State<MapScreen> {
     return GoogleMap(
         initialCameraPosition:
             const CameraPosition(target: sourceLocation, zoom: 13.0),
+        polylines: {
+          Polyline(
+              polylineId: const PolylineId("route"),
+              points: polylineCoordinates)
+        },
         markers: {
           const Marker(markerId: MarkerId("source"), position: sourceLocation),
           const Marker(
