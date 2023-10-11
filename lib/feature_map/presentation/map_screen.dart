@@ -21,6 +21,7 @@ class _MapScreenState extends State<MapScreen> {
   static const LatLng destination = LatLng(37.33429383, -122.06600055);
 
   List<LatLng> polylineCoordinates = [];
+  LocationData? currentLocation = null;
 
   @override
   void initState() {
@@ -68,11 +69,15 @@ class _MapScreenState extends State<MapScreen> {
               return const Center(child: Text("Loading..."));
             }
 
+            final currentLocation = snapshot.data!;
+
             return Stack(
               children: [
                 GoogleMap(
-                    initialCameraPosition:
-                    const CameraPosition(target: sourceLocation, zoom: 13.0),
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(currentLocation.latitude!,
+                            currentLocation.longitude!),
+                        zoom: 13.0),
                     polylines: {
                       Polyline(
                           polylineId: const PolylineId("route"),
@@ -81,10 +86,16 @@ class _MapScreenState extends State<MapScreen> {
                           width: 5)
                     },
                     markers: {
+                      Marker(
+                          markerId: const MarkerId("currentLocation"),
+                          position: LatLng(currentLocation.latitude!,
+                              currentLocation.longitude!)),
                       const Marker(
-                          markerId: MarkerId("source"), position: sourceLocation),
+                          markerId: MarkerId("source"),
+                          position: sourceLocation),
                       const Marker(
-                          markerId: MarkerId("destination"), position: destination),
+                          markerId: MarkerId("destination"),
+                          position: destination),
                     })
               ],
             );
