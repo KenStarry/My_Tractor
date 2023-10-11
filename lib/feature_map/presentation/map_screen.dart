@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 import '../../core/util/constants.dart';
 
@@ -29,6 +30,12 @@ class _MapScreenState extends State<MapScreen> {
     getPolylinePoints();
   }
 
+  Future<LocationData> getCurrentLocation() async {
+    Location location = Location();
+
+    return location.getLocation();
+  }
+
   //  get polyline points
   void getPolylinePoints() async {
     final polylinePoints = PolylinePoints();
@@ -48,20 +55,40 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-        initialCameraPosition:
-            const CameraPosition(target: sourceLocation, zoom: 13.0),
-        polylines: {
-          Polyline(
-              polylineId: const PolylineId("route"),
-              points: polylineCoordinates,
-              color: Theme.of(context).primaryColor,
-              width: 5)
-        },
-        markers: {
-          const Marker(markerId: MarkerId("source"), position: sourceLocation),
-          const Marker(
-              markerId: MarkerId("destination"), position: destination),
-        });
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: FutureBuilder(
+          future: getCurrentLocation(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.data == null) {
+              return const Center(child: Text("Loading..."));
+            }
+
+            return Stack(
+              children: [
+                GoogleMap(
+                    initialCameraPosition:
+                    const CameraPosition(target: sourceLocation, zoom: 13.0),
+                    polylines: {
+                      Polyline(
+                          polylineId: const PolylineId("route"),
+                          points: polylineCoordinates,
+                          color: Theme.of(context).primaryColor,
+                          width: 5)
+                    },
+                    markers: {
+                      const Marker(
+                          markerId: MarkerId("source"), position: sourceLocation),
+                      const Marker(
+                          markerId: MarkerId("destination"), position: destination),
+                    })
+              ],
+            );
+          }),
+    );
   }
 }
