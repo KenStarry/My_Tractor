@@ -98,47 +98,61 @@ class _MapScreenState extends State<MapScreen> {
 
             final currentLocation = snapshot.data!;
 
-            // googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-            //     CameraPosition(
-            //         zoom: 13.0,
-            //         target: LatLng(
-            //             currentLocation.latitude!,
-            //             currentLocation.longitude!))));
-
-            return Stack(
-              children: [
-                GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                      target: LatLng(currentLocation.latitude!,
-                          currentLocation.longitude!),
-                      zoom: 13.0),
-                  polylines: {
-                    Polyline(
-                        polylineId: const PolylineId("route"),
-                        points: polylineCoordinates,
-                        color: Theme.of(context).primaryColor,
-                        width: 5)
-                  },
-                  markers: {
-                    Marker(
-                        markerId: const MarkerId("currentLocation"),
-                        icon: markerIcon,
-                        position: LatLng(currentLocation.latitude!,
-                            currentLocation.longitude!)),
-                    Marker(
-                        markerId: const MarkerId("source"),
-                        icon: markerIcon,
-                        position: sourceLocation),
-                    Marker(
-                        markerId: const MarkerId("destination"),
-                        icon: markerIcon,
-                        position: destination),
-                  },
-                  onMapCreated: (controller) {
-                    _mapController.complete(controller);
-                  },
-                )
-              ],
+            return SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(32),
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                            target: LatLng(currentLocation.latitude!,
+                                currentLocation.longitude!),
+                            zoom: 13.0),
+                        polylines: {
+                          Polyline(
+                              polylineId: const PolylineId("route"),
+                              points: polylineCoordinates,
+                              color: Theme.of(context).primaryColor,
+                              width: 5)
+                        },
+                        markers: {
+                          Marker(
+                              markerId: const MarkerId("currentLocation"),
+                              icon: markerIcon,
+                              position: LatLng(currentLocation.latitude!,
+                                  currentLocation.longitude!)),
+                          Marker(
+                              markerId: const MarkerId("source"),
+                              icon: markerIcon,
+                              position: sourceLocation),
+                          Marker(
+                              markerId: const MarkerId("destination"),
+                              icon: markerIcon,
+                              position: destination),
+                        },
+                        onMapCreated: (controller) {
+                          _mapController.complete(controller);
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 150,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(topRight: Radius.circular(24), topLeft: Radius.circular(24)),
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    ),
+                    child: Column(
+                      children: [
+                        Text("Tractors", style: Theme.of(context).textTheme.titleSmall,)
+                      ],
+                    ),
+                  )
+                ],
+              ),
             );
           }),
     );
