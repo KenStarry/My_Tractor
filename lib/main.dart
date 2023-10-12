@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_tractor/feature_login/presentation/components/login.dart';
 import 'package:my_tractor/feature_map/presentation/map_screen.dart';
 import 'package:my_tractor/theme/my_theme.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: const MapScreen(),
+      home: const Login(),
       debugShowCheckedModeBanner: false,
       theme: MyTheme.lightTheme,
       darkTheme: MyTheme.lightTheme,

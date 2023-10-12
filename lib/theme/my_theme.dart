@@ -7,7 +7,7 @@ class MyTheme {
   /// Light Theme
   static ThemeData get lightTheme => ThemeData(
       primaryColor: accent,
-      primaryColorLight: textAccent,
+      primaryColorDark: secondary,
       scaffoldBackgroundColor: white,
       fontFamily: 'DMSans',
       textTheme: const TextTheme(
