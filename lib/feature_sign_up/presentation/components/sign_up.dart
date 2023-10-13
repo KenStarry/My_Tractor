@@ -58,7 +58,7 @@ class _SignUpState extends State<SignUp> {
                     onChanged: (value) {}),
 
                 //  check if they own a tractor or want to hire one
-                Text("I want to : "),
+                const Text("I want to : "),
 
                 Column(
                   children: [

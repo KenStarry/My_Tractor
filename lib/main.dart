@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_tractor/di/controller_di.dart';
 import 'package:my_tractor/feature_sign_up/presentation/components/sign_up.dart';
 import 'package:my_tractor/theme/my_theme.dart';
 
 void main() {
+
+  invokeControllers();
+
   runApp(const MyApp());
 }
 
