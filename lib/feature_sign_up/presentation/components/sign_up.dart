@@ -59,6 +59,18 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     const SizedBox(height: 24),
                     CustomTextField(
+                        hint: 'Full Name',
+                        iconData: Icons.person_rounded,
+                        textStyle: Theme.of(context).textTheme.bodyMedium!,
+                        onValidate: (value) {
+                          if (value != null && value.isNotEmpty) {
+                            return null;
+                          }
+
+                          return 'Name cannot be empty!';
+                        },
+                        onChanged: (value) {}),
+                    CustomTextField(
                         hint: 'Email Address',
                         iconData: Icons.email_rounded,
                         textStyle: Theme.of(context).textTheme.bodyMedium!,
@@ -72,7 +84,7 @@ class _SignUpState extends State<SignUp> {
                         onChanged: (value) {}),
                     CustomTextField(
                         hint: 'Phone Number',
-                        iconData: Icons.email_rounded,
+                        iconData: Icons.phone_rounded,
                         textStyle: Theme.of(context).textTheme.bodyMedium!,
                         onValidate: (value) {
                           if (value != null && value.isNotEmpty) {
