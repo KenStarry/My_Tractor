@@ -5,7 +5,7 @@ import '../../../../theme/colors.dart';
 class CustomRadio extends StatelessWidget {
   final String title;
   final String value;
-  final String groupValue;
+  final String? groupValue;
   final VoidCallback onTap;
   final Function(String?)? onChanged;
 

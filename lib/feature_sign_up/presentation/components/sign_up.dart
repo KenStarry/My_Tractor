@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_tractor/core/presentation/components/custom_radio.dart';
+import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
 
 import '../../../core/presentation/components/custom_textfield.dart';
 
@@ -12,6 +13,15 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  late final AuthController _authController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _authController = Get.find<AuthController>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,18 +72,34 @@ class _SignUpState extends State<SignUp> {
 
                 Column(
                   children: [
-                    CustomRadio(
-                        title: 'Hire a Tractor',
-                        value: '',
-                        groupValue: '',
-                        onTap: () {},
-                        onChanged: (value) {}),
-                    CustomRadio(
-                        title: 'Publish my tractor',
-                        value: '',
-                        groupValue: '',
-                        onTap: () {},
-                        onChanged: (value) {})
+                    Obx(
+                      () => CustomRadio(
+                          title: 'Hire a Tractor',
+                          value: 'Hire',
+                          groupValue: _authController.selectedUserType.value,
+                          onTap: () {
+                            _authController.setSelectedUserType(
+                                userType: 'Hire');
+                          },
+                          onChanged: (value) {
+                            _authController.setSelectedUserType(
+                                userType: value);
+                          }),
+                    ),
+                    Obx(
+                      () => CustomRadio(
+                          title: 'Publish my tractor',
+                          value: 'Publish',
+                          groupValue: _authController.selectedUserType.value,
+                          onTap: () {
+                            _authController.setSelectedUserType(
+                                userType: 'Publish');
+                          },
+                          onChanged: (value) {
+                            _authController.setSelectedUserType(
+                                userType: value);
+                          }),
+                    )
                   ],
                 ),
 
