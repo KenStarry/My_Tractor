@@ -57,6 +57,7 @@ class _SignUpState extends State<SignUp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 24),
                     CustomTextField(
                         hint: 'Email Address',
                         iconData: Icons.email_rounded,
