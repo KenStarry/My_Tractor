@@ -6,7 +6,7 @@ abstract class AuthRepository {
 
   /// Create Account
   Future<void> createAccount({
-    required String email,
+    required UserModel userModel,
     required String password,
     required Function(ResponseState response, String? error) response,
   });

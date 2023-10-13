@@ -5,7 +5,6 @@ import 'package:my_tractor/core/domain/model/user_model.dart';
 import 'package:my_tractor/core/domain/repository/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
 
@@ -16,9 +15,23 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> createAccount({required String email, required String password, required Function(ResponseState response, String? error) response}) {
-    // TODO: implement createAccount
-    throw UnimplementedError();
+  Future<void> createAccount(
+      {required UserModel userModel,
+      required String password,
+      required Function(ResponseState response, String? error)
+          response}) async {
+    try {
+      await auth
+          .createUserWithEmailAndPassword(
+              email: userModel.email!, password: password)
+          .then((value) async {
+        //  create account in firestore
+        await saveUserDataToFirestore(
+            userModel: userModel, response: response, onSuccess: () {});
+      });
+    } on FirebaseException catch (error) {
+      response(ResponseState.failure, error.message);
+    }
   }
 
   @override
@@ -34,13 +47,28 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> saveUserDataToFirestore({required UserModel userModel, required Function(ResponseState response, String? error) response, required Function onSuccess}) {
-    // TODO: implement saveUserDataToFirestore
-    throw UnimplementedError();
+  Future<void> saveUserDataToFirestore(
+      {required UserModel userModel,
+      required Function(ResponseState response, String? error) response,
+      required Function onSuccess}) async {
+    try {
+      await firestore
+          .collection('Users')
+          .doc(auth.currentUser!.uid)
+          .set(userModel.toJson())
+          .then((value) {
+        response(ResponseState.success);
+      });
+    } on FirebaseException catch (error) {
+      response(ResponseState.failure, error.message);
+    }
   }
 
   @override
-  Future<void> signIn({required String email, required String password, required Function(ResponseState response, String? error) response}) {
+  Future<void> signIn(
+      {required String email,
+      required String password,
+      required Function(ResponseState response, String? error) response}) {
     // TODO: implement signIn
     throw UnimplementedError();
   }
@@ -52,10 +80,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> updateUserDataInFirestore({required UserModel oldUser, required UserModel newUser, required String uid, Function(ResponseState response, String? error)? response}) {
+  Future<void> updateUserDataInFirestore(
+      {required UserModel oldUser,
+      required UserModel newUser,
+      required String uid,
+      Function(ResponseState response, String? error)? response}) {
     // TODO: implement updateUserDataInFirestore
     throw UnimplementedError();
   }
-
-  
 }
