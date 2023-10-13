@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_tractor/feature_login/presentation/components/login.dart';
-import 'package:my_tractor/feature_map/presentation/map_screen.dart';
+import 'package:my_tractor/feature_sign_up/presentation/components/sign_up.dart';
 import 'package:my_tractor/theme/my_theme.dart';
 
 void main() {
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: const Login(),
+      home: const SignUp(),
       debugShowCheckedModeBanner: false,
       theme: MyTheme.lightTheme,
       darkTheme: MyTheme.lightTheme,
