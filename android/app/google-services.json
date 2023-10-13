@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "211875703681",
+    "project_id": "my-tractor-c7629",
+    "storage_bucket": "my-tractor-c7629.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211875703681:android:7845e69ec061529e549680",
+        "android_client_info": {
+          "package_name": "com.kenstarry.my_tractor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ7aTuFxuJLO2RfGo9tf-xD7xe-bZvauA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
