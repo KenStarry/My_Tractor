@@ -57,7 +57,7 @@ class AuthRepositoryImpl implements AuthRepository {
           .doc(auth.currentUser!.uid)
           .set(userModel.toJson())
           .then((value) {
-        response(ResponseState.success);
+        response(ResponseState.success, null);
       });
     } on FirebaseException catch (error) {
       response(ResponseState.failure, error.message);

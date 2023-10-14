@@ -5,4 +5,6 @@ class AuthController extends GetxController {
 
   void setSelectedUserType({required String? userType}) =>
       selectedUserType.value = userType;
+
+
 }
