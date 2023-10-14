@@ -10,12 +10,10 @@ class SignIn {
   Future<void> call({
     required String email,
     required String password,
-    required Function(UserModel userModel) onUserReceived,
     required Function(ResponseState response, String? error) response,
   }) async =>
       await repo.signIn(
           email: email,
           password: password,
-          onUserReceived: onUserReceived,
           response: response);
 }

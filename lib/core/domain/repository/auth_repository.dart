@@ -19,7 +19,6 @@ abstract class AuthRepository {
   Future<void> signIn({
     required String email,
     required String password,
-    required Function(UserModel userModel) onUserReceived,
     required Function(ResponseState response, String? error) response,
   });
 
@@ -30,7 +29,7 @@ abstract class AuthRepository {
   Future<bool> checkUserExists({required String uid});
 
   /// Get User Data From Firebase
-  Future<UserModel> getSpecificUserFromFirestore({required String uid});
+  Future<UserModel> getSpecificUserFromFirestore({String? uid});
 
   /// Update User Data In Firestore
   Future<void> updateUserDataInFirestore(

@@ -24,6 +24,8 @@ class AuthController extends GetxController {
   void setSelectedUserType({required String? userType}) =>
       selectedUserType.value = userType;
 
+  void setUserModel({required UserModel? user}) => userModel.value = user;
+
   Future<void> createAccount({
     required UserModel userModel,
     required String password,
@@ -37,13 +39,11 @@ class AuthController extends GetxController {
   Future<void> signIn({
     required String email,
     required String password,
-    required Function(UserModel userModel) onUserReceived,
     required Function(ResponseState response, String? error) response,
   }) async =>
       await authUseCase.signIn.call(
           email: email,
           password: password,
-          onUserReceived: onUserReceived,
           response: response);
 
   Future<void> signOut() async => await authUseCase.signOut();
