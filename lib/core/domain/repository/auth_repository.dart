@@ -24,12 +24,6 @@ abstract class AuthRepository {
   /// Check if User Exists
   Future<bool> checkUserExists({required String uid});
 
-  /// Save User to Firestore
-  Future<void> saveUserDataToFirestore(
-      {required UserModel userModel,
-      required Function(ResponseState response, String? error) response,
-      required Function onSuccess});
-
   /// Get User Data From Firebase
   Stream<DocumentSnapshot> getUserDataFromFirestore();
 

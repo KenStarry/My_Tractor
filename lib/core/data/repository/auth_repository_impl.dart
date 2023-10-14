@@ -26,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
               email: userModel.email!, password: password)
           .then((value) async {
         //  create account in firestore
-        await saveUserDataToFirestore(
+        await _saveUserDataToFirestore(
             userModel: userModel, response: response, onSuccess: () {});
       });
     } on FirebaseException catch (error) {
@@ -46,8 +46,7 @@ class AuthRepositoryImpl implements AuthRepository {
     throw UnimplementedError();
   }
 
-  @override
-  Future<void> saveUserDataToFirestore(
+  Future<void> _saveUserDataToFirestore(
       {required UserModel userModel,
       required Function(ResponseState response, String? error) response,
       required Function onSuccess}) async {
