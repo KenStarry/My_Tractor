@@ -4,6 +4,7 @@ import 'package:my_tractor/core/domain/repository/auth_repository.dart';
 import 'package:my_tractor/core/domain/use_case/auth_state.dart';
 import 'package:my_tractor/core/domain/use_case/auth_use_cases.dart';
 import 'package:my_tractor/core/domain/use_case/create_account.dart';
+import 'package:my_tractor/core/domain/use_case/get_specific_user_from_firestore.dart';
 import 'package:my_tractor/core/domain/use_case/sign_in.dart';
 import 'package:my_tractor/core/domain/use_case/sign_out.dart';
 
@@ -18,5 +19,6 @@ void invokeDI() {
       createAccount: CreateAccount(),
       authState: AuthState(),
       signIn: SignIn(),
-      signOut: SignOut()));
+      signOut: SignOut(),
+      getSpecificUserFromFirestore: GetSpecificUserFromFirestore()));
 }

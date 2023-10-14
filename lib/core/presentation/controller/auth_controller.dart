@@ -41,10 +41,11 @@ class AuthController extends GetxController {
     required String password,
     required Function(ResponseState response, String? error) response,
   }) async =>
-      await authUseCase.signIn.call(
-          email: email,
-          password: password,
-          response: response);
+      await authUseCase.signIn
+          .call(email: email, password: password, response: response);
 
   Future<void> signOut() async => await authUseCase.signOut();
+
+  Future<UserModel> getSpecificUserFromFirestore({String? uid}) async =>
+      await authUseCase.getSpecificUserFromFirestore.call(uid: uid);
 }
