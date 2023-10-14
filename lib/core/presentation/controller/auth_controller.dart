@@ -9,6 +9,18 @@ class AuthController extends GetxController {
   final selectedUserType = Rxn<String>();
   final authUseCase = locator.get<AuthUseCases>();
 
+  final userModel = Rxn<UserModel>();
+  final isLoggedIn = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    authState().listen((user) {
+      isLoggedIn.value = user != null;
+    });
+  }
+
   void setSelectedUserType({required String? userType}) =>
       selectedUserType.value = userType;
 
