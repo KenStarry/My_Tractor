@@ -7,6 +7,7 @@ import 'package:my_tractor/core/domain/use_case/create_account.dart';
 import 'package:my_tractor/core/domain/use_case/get_specific_user_from_firestore.dart';
 import 'package:my_tractor/core/domain/use_case/sign_in.dart';
 import 'package:my_tractor/core/domain/use_case/sign_out.dart';
+import 'package:my_tractor/core/domain/use_case/update_user_data.dart';
 
 final locator = GetIt.instance;
 
@@ -20,5 +21,6 @@ void invokeDI() {
       authState: AuthState(),
       signIn: SignIn(),
       signOut: SignOut(),
-      getSpecificUserFromFirestore: GetSpecificUserFromFirestore()));
+      getSpecificUserFromFirestore: GetSpecificUserFromFirestore(),
+  updateUserData: UpdateUserData()));
 }

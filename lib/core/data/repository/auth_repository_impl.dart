@@ -96,11 +96,19 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> updateUserDataInFirestore(
-      {required UserModel oldUser,
-      required UserModel newUser,
+      {required UserModel newUser,
       required String uid,
-      Function(ResponseState response, String? error)? response}) {
-    // TODO: implement updateUserDataInFirestore
-    throw UnimplementedError();
+      Function(ResponseState response, String? error)? response}) async {
+    try {
+      await firestore
+          .collection('Users')
+          .doc(uid)
+          .set(newUser.toJson())
+          .then((value) {
+        response!(ResponseState.success, null);
+      });
+    } catch (error) {
+      throw Exception(error);
+    }
   }
 }
