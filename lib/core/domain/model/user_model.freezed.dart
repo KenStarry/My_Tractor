@@ -24,6 +24,8 @@ mixin _$UserModel {
   String? get email => throw _privateConstructorUsedError;
   String? get phoneNumber => throw _privateConstructorUsedError;
   String? get userType => throw _privateConstructorUsedError;
+  double? get latitude => throw _privateConstructorUsedError;
+  double? get longitude => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +39,12 @@ abstract class $UserModelCopyWith<$Res> {
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
   $Res call(
-      {String? fullName, String? email, String? phoneNumber, String? userType});
+      {String? fullName,
+      String? email,
+      String? phoneNumber,
+      String? userType,
+      double? latitude,
+      double? longitude});
 }
 
 /// @nodoc
@@ -57,6 +64,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? email = freezed,
     Object? phoneNumber = freezed,
     Object? userType = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(_value.copyWith(
       fullName: freezed == fullName
@@ -75,6 +84,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.userType
           : userType // ignore: cast_nullable_to_non_nullable
               as String?,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -88,7 +105,12 @@ abstract class _$$UserModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? fullName, String? email, String? phoneNumber, String? userType});
+      {String? fullName,
+      String? email,
+      String? phoneNumber,
+      String? userType,
+      double? latitude,
+      double? longitude});
 }
 
 /// @nodoc
@@ -106,6 +128,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? phoneNumber = freezed,
     Object? userType = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(_$UserModelImpl(
       fullName: freezed == fullName
@@ -124,6 +148,14 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.userType
           : userType // ignore: cast_nullable_to_non_nullable
               as String?,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -132,7 +164,12 @@ class __$$UserModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserModelImpl implements _UserModel {
   const _$UserModelImpl(
-      {this.fullName, this.email, this.phoneNumber, this.userType});
+      {this.fullName,
+      this.email,
+      this.phoneNumber,
+      this.userType,
+      this.latitude,
+      this.longitude});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -145,10 +182,14 @@ class _$UserModelImpl implements _UserModel {
   final String? phoneNumber;
   @override
   final String? userType;
+  @override
+  final double? latitude;
+  @override
+  final double? longitude;
 
   @override
   String toString() {
-    return 'UserModel(fullName: $fullName, email: $email, phoneNumber: $phoneNumber, userType: $userType)';
+    return 'UserModel(fullName: $fullName, email: $email, phoneNumber: $phoneNumber, userType: $userType, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -162,13 +203,17 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             (identical(other.userType, userType) ||
-                other.userType == userType));
+                other.userType == userType) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, fullName, email, phoneNumber, userType);
+  int get hashCode => Object.hash(
+      runtimeType, fullName, email, phoneNumber, userType, latitude, longitude);
 
   @JsonKey(ignore: true)
   @override
@@ -189,7 +234,9 @@ abstract class _UserModel implements UserModel {
       {final String? fullName,
       final String? email,
       final String? phoneNumber,
-      final String? userType}) = _$UserModelImpl;
+      final String? userType,
+      final double? latitude,
+      final double? longitude}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -202,6 +249,10 @@ abstract class _UserModel implements UserModel {
   String? get phoneNumber;
   @override
   String? get userType;
+  @override
+  double? get latitude;
+  @override
+  double? get longitude;
   @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>

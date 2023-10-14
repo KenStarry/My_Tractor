@@ -25,7 +25,9 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            //  send live location to database
+          },
           backgroundColor: Theme.of(context).primaryColorDark.withOpacity(0.7),
           label: Row(
             children: [

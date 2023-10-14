@@ -10,7 +10,9 @@ class UserModel with _$UserModel {
       {String? fullName,
       String? email,
       String? phoneNumber,
-      String? userType}) = _UserModel;
+      String? userType,
+      double? latitude,
+      double? longitude}) = _UserModel;
 
   factory UserModel.fromJson(Map<String, Object?> json) =>
       _$UserModelFromJson(json);
