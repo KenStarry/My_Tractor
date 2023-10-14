@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
+import 'package:my_tractor/core/presentation/dashboard_separator.dart';
 import 'package:my_tractor/di/controller_di.dart';
 import 'package:my_tractor/di/locator.dart';
 import 'package:my_tractor/feature_login/presentation/components/login.dart';
@@ -51,7 +52,7 @@ class _MyAppState extends State<MyApp> {
     return Obx(
       () => GetMaterialApp(
         home: _authController.isLoggedIn.value
-            ? const TractorOwnerHome()
+            ? const DashboardSeparator()
             : const Login(),
         debugShowCheckedModeBanner: false,
         theme: MyTheme.lightTheme,

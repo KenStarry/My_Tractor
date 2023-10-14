@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:my_tractor/core/domain/model/user_model.dart';
 import 'package:my_tractor/core/presentation/components/custom_radio.dart';
 import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
+import 'package:my_tractor/feature_map/presentation/map_screen.dart';
 
+import '../../../core/domain/model/response_state.dart';
 import '../../../core/presentation/components/custom_textfield.dart';
+import '../../../feature_tractor_owner_home/presentation/tractor_owner_home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -193,7 +196,22 @@ class _SignUpState extends State<SignUp> {
                                 await _authController.createAccount(
                                     userModel: user,
                                     password: _passwordController.text,
-                                    response: (state, error) {});
+                                    response: (state, error) {
+                                      switch (state) {
+                                        case ResponseState.success:
+                                          Get.to(() => _authController
+                                                      .selectedUserType.value ==
+                                                  'Publish'
+                                              ? const TractorOwnerHome()
+                                              : const MapScreen());
+                                          break;
+                                        case ResponseState.loading:
+                                          break;
+                                        case ResponseState.failure:
+                                          print("ERROR : ${error!}");
+                                          break;
+                                      }
+                                    });
                               }
                             },
                             style: FilledButton.styleFrom(
