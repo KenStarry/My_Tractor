@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_tractor/core/domain/model/user_model.dart';
 import 'package:my_tractor/core/presentation/components/custom_radio.dart';
 import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
 
@@ -15,6 +16,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   late final AuthController _authController;
   late final GlobalKey<FormState> _formKey;
+  late final TextEditingController _fullNameController;
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
   late final TextEditingController _passwordController;
@@ -25,6 +27,7 @@ class _SignUpState extends State<SignUp> {
     super.initState();
 
     _formKey = GlobalKey<FormState>();
+    _fullNameController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
     _passwordController = TextEditingController();
@@ -60,6 +63,7 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(height: 24),
                     CustomTextField(
                         hint: 'Full Name',
+                        controller: _fullNameController,
                         iconData: Icons.person_rounded,
                         textStyle: Theme.of(context).textTheme.bodyMedium!,
                         onValidate: (value) {
@@ -72,6 +76,7 @@ class _SignUpState extends State<SignUp> {
                         onChanged: (value) {}),
                     CustomTextField(
                         hint: 'Email Address',
+                        controller: _emailController,
                         iconData: Icons.email_rounded,
                         textStyle: Theme.of(context).textTheme.bodyMedium!,
                         onValidate: (value) {
@@ -84,6 +89,7 @@ class _SignUpState extends State<SignUp> {
                         onChanged: (value) {}),
                     CustomTextField(
                         hint: 'Phone Number',
+                        controller: _phoneController,
                         iconData: Icons.phone_rounded,
                         textStyle: Theme.of(context).textTheme.bodyMedium!,
                         onValidate: (value) {
@@ -169,12 +175,22 @@ class _SignUpState extends State<SignUp> {
                       child: Container(
                         width: double.infinity,
                         child: FilledButton(
-                            onPressed: () {
+                            onPressed: () async {
                               //  create user in firestore
                               if (_formKey.currentState!.validate() &&
                                   _authController.selectedUserType.value !=
                                       null) {
-                                print("Hey");
+                                final user = UserModel(
+                                    fullName: _fullNameController.text,
+                                    email: _emailController.text,
+                                    phoneNumber: _phoneController.text,
+                                    userType:
+                                        _authController.selectedUserType.value);
+
+                                await _authController.createAccount(
+                                    userModel: user,
+                                    password: _passwordController.text,
+                                    response: (state, error) {});
                               }
                             },
                             style: FilledButton.styleFrom(
