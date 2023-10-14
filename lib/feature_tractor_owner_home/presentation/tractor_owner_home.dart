@@ -26,6 +26,7 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
       return Future.error('Location services are disabled.');
     }
 
@@ -94,7 +95,8 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                       onPressed: () async {
                         //  send live location to database
                         await _authController.updateUserData(
-                            newUser: user.copyWith(latitude: 180.05, longitude: 190.5),
+                            newUser: user.copyWith(
+                                latitude: 180.05, longitude: 190.5),
                             uid: user.uid!);
                       },
                       backgroundColor:
@@ -152,11 +154,13 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
               ),
               floatingActionButton: FloatingActionButton.extended(
                   onPressed: () async {
-                    //  send live location to database
-                    await _authController.updateUserData(
-                        newUser: _authController.userModel.value!
-                            .copyWith(latitude: 90.05),
-                        uid: _authController.userModel.value!.uid!);
+                    await _getCurrentLocation().then((pos) async {
+                      //  send live location to database
+                      await _authController.updateUserData(
+                          newUser: _authController.userModel.value!.copyWith(
+                              latitude: pos.latitude, longitude: pos.longitude),
+                          uid: _authController.userModel.value!.uid!);
+                    });
                   },
                   backgroundColor:
                       Theme.of(context).primaryColorDark.withOpacity(0.7),
