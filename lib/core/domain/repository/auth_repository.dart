@@ -29,9 +29,6 @@ abstract class AuthRepository {
   Future<bool> checkUserExists({required String uid});
 
   /// Get User Data From Firebase
-  Stream<DocumentSnapshot> getUserDataFromFirestore();
-
-  /// Get User Data From Firebase
   Future<UserModel> getSpecificUserFromFirestore({required String uid});
 
   /// Update User Data In Firestore
