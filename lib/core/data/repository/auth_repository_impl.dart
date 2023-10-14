@@ -25,9 +25,13 @@ class AuthRepositoryImpl implements AuthRepository {
           .createUserWithEmailAndPassword(
               email: userModel.email!, password: password)
           .then((value) async {
+        //  get the UID
+        final uid = auth.currentUser!.uid;
+        final newUserModel = userModel.copyWith(uid: uid);
+
         //  create account in firestore
         await _saveUserDataToFirestore(
-            userModel: userModel, response: response, onSuccess: () {});
+            userModel: newUserModel, response: response, onSuccess: () {});
       });
     } on FirebaseException catch (error) {
       response(ResponseState.failure, error.message);

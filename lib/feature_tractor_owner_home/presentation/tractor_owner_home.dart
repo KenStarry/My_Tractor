@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_tractor/feature_tractor_owner_home/presentation/components/request_card.dart';
 
 class TractorOwnerHome extends StatefulWidget {
   const TractorOwnerHome({super.key});
@@ -44,10 +45,17 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
             ],
           )),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: const SafeArea(
+      body: SafeArea(
           child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text("I'm Home"),
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: ListView.separated(
+              itemBuilder: (context, index) => const RequestCard(),
+              separatorBuilder: (context, index) => const SizedBox(height: 24),
+              itemCount: 20),
+        ),
       )),
     );
   }
