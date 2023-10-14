@@ -74,16 +74,21 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signIn(
       {required String email,
       required String password,
-      required Function(ResponseState response, String? error) response}) {
-    // TODO: implement signIn
-    throw UnimplementedError();
+      required Function(ResponseState response, String? error)
+          response}) async {
+    try {
+      await auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        response(ResponseState.success, null);
+      });
+    } on FirebaseException catch (error) {
+      response(ResponseState.failure, error.message);
+    }
   }
 
   @override
-  Future<void> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
-  }
+  Future<void> signOut() async => await auth.signOut();
 
   @override
   Future<void> updateUserDataInFirestore(
