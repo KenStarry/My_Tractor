@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
@@ -19,6 +20,31 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
     super.initState();
 
     _authController = Get.find<AuthController>();
+  }
+
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied.');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied.');
+    }
+
+    //  get current device position
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -68,7 +94,7 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                       onPressed: () async {
                         //  send live location to database
                         await _authController.updateUserData(
-                            newUser: user.copyWith(latitude: 180.05),
+                            newUser: user.copyWith(latitude: 180.05, longitude: 190.5),
                             uid: user.uid!);
                       },
                       backgroundColor:
