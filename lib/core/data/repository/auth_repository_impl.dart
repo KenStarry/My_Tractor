@@ -35,6 +35,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Stream authState() => auth.authStateChanges();
+
+  @override
   Future<UserModel> getSpecificUserFromFirestore({required String uid}) {
     // TODO: implement getSpecificUserFromFirestore
     throw UnimplementedError();

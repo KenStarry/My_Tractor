@@ -19,4 +19,6 @@ class AuthController extends GetxController {
   }) async =>
       await authUseCase.createAccount
           .call(userModel: userModel, password: password, response: response);
+
+  Stream authState() => authUseCase.authState();
 }

@@ -1,15 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../model/response_state.dart';
 import '../model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class AuthRepository {
-
   /// Create Account
   Future<void> createAccount({
     required UserModel userModel,
     required String password,
     required Function(ResponseState response, String? error) response,
   });
+
+  /// Auth State
+  Stream authState();
 
   /// Sign In
   Future<void> signIn({
