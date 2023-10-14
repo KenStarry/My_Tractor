@@ -39,7 +39,7 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                 }
 
                 if (snapshot.data == null) {
-                  return Center(child: const Text("No Data found!"));
+                  return const Center(child: Text("No Data found!"));
                 }
 
                 final user = snapshot.data!;
@@ -65,8 +65,11 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                     ],
                   ),
                   floatingActionButton: FloatingActionButton.extended(
-                      onPressed: () {
+                      onPressed: () async {
                         //  send live location to database
+                        await _authController.updateUserData(
+                            newUser: user.copyWith(latitude: 180.05),
+                            uid: user.uid!);
                       },
                       backgroundColor:
                           Theme.of(context).primaryColorDark.withOpacity(0.7),
@@ -122,8 +125,12 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                 ],
               ),
               floatingActionButton: FloatingActionButton.extended(
-                  onPressed: () {
+                  onPressed: () async {
                     //  send live location to database
+                    await _authController.updateUserData(
+                        newUser: _authController.userModel.value!
+                            .copyWith(latitude: 90.05),
+                        uid: _authController.userModel.value!.uid!);
                   },
                   backgroundColor:
                       Theme.of(context).primaryColorDark.withOpacity(0.7),
