@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
 import 'package:my_tractor/feature_tractor_owner_home/presentation/components/request_card.dart';
 
 class TractorOwnerHome extends StatefulWidget {
@@ -9,6 +12,16 @@ class TractorOwnerHome extends StatefulWidget {
 }
 
 class _TractorOwnerHomeState extends State<TractorOwnerHome> {
+
+  late final AuthController _authController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _authController = Get.find<AuthController>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +31,9 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
         elevation: 0,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await _authController.signOut();
+              },
               icon: Icon(
                 Icons.logout_rounded,
                 color: Theme.of(context).primaryColor,

@@ -57,6 +57,7 @@ class AuthRepositoryImpl implements AuthRepository {
       {required UserModel userModel,
       required Function(ResponseState response, String? error) response,
       required Function onSuccess}) async {
+    response(ResponseState.loading, null);
     try {
       await firestore
           .collection('Users')
@@ -76,6 +77,7 @@ class AuthRepositoryImpl implements AuthRepository {
       required String password,
       required Function(ResponseState response, String? error)
           response}) async {
+    response(ResponseState.loading, null);
     try {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)

@@ -36,6 +36,14 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     _authController = Get.find<AuthController>();
+
+    ever(_authController.isLoggedIn, (isLoggedIn) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!isLoggedIn) {
+          Get.offAll(() => const Login());
+        }
+      });
+    });
   }
 
   @override
