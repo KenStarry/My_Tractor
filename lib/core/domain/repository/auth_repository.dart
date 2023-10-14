@@ -19,6 +19,7 @@ abstract class AuthRepository {
   Future<void> signIn({
     required String email,
     required String password,
+    required Function(UserModel userModel) onUserReceived,
     required Function(ResponseState response, String? error) response,
   });
 

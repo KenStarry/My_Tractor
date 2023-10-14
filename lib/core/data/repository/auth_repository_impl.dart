@@ -42,10 +42,12 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream authState() => auth.authStateChanges();
 
   @override
-  Future<UserModel> getSpecificUserFromFirestore({required String uid}) async {
+  Future<UserModel> getSpecificUserFromFirestore({String? uid}) async {
     try {
-      final snapshot =
-          await firestore.collection('Users').doc(uid).get();
+      final snapshot = await firestore
+          .collection('Users')
+          .doc(uid ?? auth.currentUser!.uid)
+          .get();
 
       return UserModel.fromJson(snapshot.data()!);
     } catch (error) {
@@ -75,6 +77,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signIn(
       {required String email,
       required String password,
+      required Function(UserModel userModel) onUserReceived,
       required Function(ResponseState response, String? error)
           response}) async {
     response(ResponseState.loading, null);
@@ -82,7 +85,12 @@ class AuthRepositoryImpl implements AuthRepository {
       final credential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      credential.user!.uid;
+      //  get specific user from firestore
+      final userData =
+          await getSpecificUserFromFirestore(uid: credential.user!.uid);
+
+      onUserReceived(userData);
+      response(ResponseState.success, null);
     } on FirebaseException catch (error) {
       response(ResponseState.failure, error.message);
     }

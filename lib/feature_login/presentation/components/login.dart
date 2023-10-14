@@ -83,6 +83,9 @@ class _LoginState extends State<Login> {
                           await _authController.signIn(
                               email: _emailController.text,
                               password: _passwordController.text,
+                              onUserReceived: (user) {
+
+                              },
                               response: (state, error) {
                                 switch (state) {
                                   case ResponseState.success:

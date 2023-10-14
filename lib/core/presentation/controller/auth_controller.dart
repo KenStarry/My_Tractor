@@ -37,10 +37,14 @@ class AuthController extends GetxController {
   Future<void> signIn({
     required String email,
     required String password,
+    required Function(UserModel userModel) onUserReceived,
     required Function(ResponseState response, String? error) response,
   }) async =>
-      await authUseCase.signIn
-          .call(email: email, password: password, response: response);
+      await authUseCase.signIn.call(
+          email: email,
+          password: password,
+          onUserReceived: onUserReceived,
+          response: response);
 
   Future<void> signOut() async => await authUseCase.signOut();
 }
