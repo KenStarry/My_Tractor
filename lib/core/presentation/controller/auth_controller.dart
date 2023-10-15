@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:location/location.dart';
 import 'package:my_tractor/core/domain/use_case/auth_use_cases.dart';
 import 'package:my_tractor/di/locator.dart';
 
@@ -11,7 +12,7 @@ class AuthController extends GetxController {
   final authUseCase = locator.get<AuthUseCases>();
 
   final userModel = Rxn<UserModel>();
-  final allTractors = <UserModel>[].obs;
+  final allTractors = <UserModel>{}.obs;
   final isLoggedIn = false.obs;
 
   @override
@@ -26,7 +27,7 @@ class AuthController extends GetxController {
       final tractors = snapshots.docs
           .map(
               (snapshotDocument) => UserModel.fromJson(snapshotDocument.data()))
-          .toList();
+          .toList().toSet();
 
       allTractors.value = tractors;
     });

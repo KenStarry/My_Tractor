@@ -5,9 +5,12 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+import '../../core/presentation/controller/auth_controller.dart';
 import '../../core/util/constants.dart';
 
 class MapScreen extends StatefulWidget {
@@ -20,22 +23,39 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   late final Completer<GoogleMapController> _mapController;
   late final GoogleMapController googleMapController;
+  late final AuthController _authController;
 
   static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
   static const LatLng destination = LatLng(37.33429383, -122.06600055);
 
+  LocationData? currentUserLocation = null;
+
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
 
   List<LatLng> polylineCoordinates = [];
-  LocationData? currentLocation = null;
 
   @override
   void initState() {
     super.initState();
 
+    _authController = Get.find<AuthController>();
     _mapController = Completer();
     getPolylinePoints();
     setCustomMarkerIcon();
+
+    getCurrentLocation().listen((location) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          currentUserLocation = location;
+        });
+      });
+    });
+  }
+
+  Stream<LocationData> getCurrentLocation() {
+    Location location = Location();
+
+    return location.onLocationChanged;
   }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -58,12 +78,6 @@ class _MapScreenState extends State<MapScreen> {
     googleMapController = await _mapController.future;
   }
 
-  Stream<LocationData> getCurrentLocation() {
-    Location location = Location();
-
-    return location.onLocationChanged;
-  }
-
   //  get polyline points
   void getPolylinePoints() async {
     final polylinePoints = PolylinePoints();
@@ -84,69 +98,64 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: StreamBuilder(
-          stream: getCurrentLocation(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (snapshot.data == null) {
-              return const Center(child: Text("Loading..."));
-            }
-
-            final currentLocation = snapshot.data!;
-
-            return SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(32),
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                            target: LatLng(currentLocation.latitude!,
-                                currentLocation.longitude!),
-                            zoom: 13.0),
-                        polylines: {
-                          Polyline(
-                              polylineId: const PolylineId("route"),
-                              points: polylineCoordinates,
-                              color: Theme.of(context).primaryColor,
-                              width: 5)
-                        },
-                        markers: {
-                          Marker(
-                              markerId: const MarkerId("currentLocation"),
-                              icon: markerIcon,
-                              position: LatLng(0.2955185,
-                                  34.7662531)),
-                        },
-                        onMapCreated: (controller) {
-                          _mapController.complete(controller);
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 150,
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(topRight: Radius.circular(24), topLeft: Radius.circular(24)),
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    ),
-                    child: Column(
-                      children: [
-                        Text("Tractors", style: Theme.of(context).textTheme.titleSmall,)
-                      ],
-                    ),
-                  )
-                ],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(32),
+                  child: currentUserLocation == null
+                      ? CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        )
+                      : Obx(
+                          () => GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                                target: LatLng(currentUserLocation!.latitude!,
+                                    currentUserLocation!.longitude!),
+                                zoom: 13.0),
+                            polylines: {
+                              Polyline(
+                                  polylineId: const PolylineId("route"),
+                                  points: polylineCoordinates,
+                                  color: Theme.of(context).primaryColor,
+                                  width: 5)
+                            },
+                            markers: _authController.allTractors
+                                .map((tractor) => Marker(
+                                    markerId: const MarkerId("currentLocation"),
+                                    icon: markerIcon,
+                                    position: LatLng(tractor.latitude!, tractor.longitude!)))
+                                .toSet(),
+                            onMapCreated: (controller) {
+                              _mapController.complete(controller);
+                            },
+                          ),
+                        ),
+                ),
               ),
-            );
-          }),
-    );
+              Container(
+                width: double.infinity,
+                height: 150,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(24),
+                      topLeft: Radius.circular(24)),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      "Tractors",
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
