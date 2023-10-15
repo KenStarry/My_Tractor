@@ -120,16 +120,8 @@ class _MapScreenState extends State<MapScreen> {
                           Marker(
                               markerId: const MarkerId("currentLocation"),
                               icon: markerIcon,
-                              position: LatLng(currentLocation.latitude!,
-                                  currentLocation.longitude!)),
-                          Marker(
-                              markerId: const MarkerId("source"),
-                              icon: markerIcon,
-                              position: sourceLocation),
-                          Marker(
-                              markerId: const MarkerId("destination"),
-                              icon: markerIcon,
-                              position: destination),
+                              position: LatLng(0.2955185,
+                                  34.7662531)),
                         },
                         onMapCreated: (controller) {
                           _mapController.complete(controller);

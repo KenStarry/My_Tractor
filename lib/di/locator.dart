@@ -9,6 +9,8 @@ import 'package:my_tractor/core/domain/use_case/sign_in.dart';
 import 'package:my_tractor/core/domain/use_case/sign_out.dart';
 import 'package:my_tractor/core/domain/use_case/update_user_data.dart';
 
+import '../core/domain/use_case/get_all_users_from_firestore.dart';
+
 final locator = GetIt.instance;
 
 void invokeDI() {
@@ -22,5 +24,6 @@ void invokeDI() {
       signIn: SignIn(),
       signOut: SignOut(),
       getSpecificUserFromFirestore: GetSpecificUserFromFirestore(),
-  updateUserData: UpdateUserData()));
+      updateUserData: UpdateUserData(),
+      getAllUsersFromFirestore: GetAllUsersFromFirestore()));
 }

@@ -111,4 +111,12 @@ class AuthRepositoryImpl implements AuthRepository {
       throw Exception(error);
     }
   }
+
+  @override
+  Stream getAllUsersFromFirestore() {
+    return firestore
+        .collection('Users')
+        .where('userType', isEqualTo: 'Publish')
+        .snapshots();
+  }
 }
