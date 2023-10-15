@@ -191,7 +191,8 @@ class _SignUpState extends State<SignUp> {
                                     userType:
                                         _authController.selectedUserType.value,
                                     latitude: 0.0,
-                                    longitude: 0.0);
+                                    longitude: 0.0,
+                                    requests: []);
 
                                 await _authController.createAccount(
                                     userModel: user,

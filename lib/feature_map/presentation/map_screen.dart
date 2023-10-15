@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -131,10 +132,10 @@ class _MapScreenState extends State<MapScreen> {
                                         currentUserLocation!.latitude!,
                                         currentUserLocation!.longitude!),
                                     zoom: 13.0),
-                                onTap: (position){
+                                onTap: (position) {
                                   _customInfoWindowController.hideInfoWindow!();
                                 },
-                                onCameraMove: (position){
+                                onCameraMove: (position) {
                                   _customInfoWindowController.onCameraMove!();
                                 },
                                 polylines: {
@@ -154,20 +155,25 @@ class _MapScreenState extends State<MapScreen> {
                                         onTap: () {
                                           _customInfoWindowController
                                                   .addInfoWindow!(
-                                              MyInfoWindow(),
+                                              MyInfoWindow(
+                                                tractorOwnerId: tractor.uid!,
+                                                currentUserId: _authController
+                                                    .userModel.value!.uid!,
+                                              ),
                                               LatLng(tractor.latitude!,
                                                   tractor.longitude!));
                                         }))
                                     .toSet(),
                                 onMapCreated: (controller) {
                                   _mapController.complete(controller);
-                                  _customInfoWindowController.googleMapController = controller;
+                                  _customInfoWindowController
+                                      .googleMapController = controller;
                                 },
                               ),
                               CustomInfoWindow(
                                 controller: _customInfoWindowController,
-                                height: 150,
-                                width: 150,
+                                height: 180,
+                                width: 180,
                                 offset: 50,
                               )
                             ],
@@ -200,10 +206,20 @@ class _MapScreenState extends State<MapScreen> {
                             return TractorCard(
                               ownerName: tractor.fullName!,
                               onClick: () {
-                                googleMapController.animateCamera(
-                                    CameraUpdate.newLatLng(LatLng(
-                                        tractor.latitude!,
-                                        tractor.longitude!)));
+                                googleMapController
+                                    .animateCamera(CameraUpdate.newLatLng(
+                                        LatLng(tractor.latitude!,
+                                            tractor.longitude!)))
+                                    .then((value) {
+                                  _customInfoWindowController.addInfoWindow!(
+                                      MyInfoWindow(
+                                        tractorOwnerId: tractor.uid!,
+                                        currentUserId: _authController
+                                            .userModel.value!.uid!,
+                                      ),
+                                      LatLng(tractor.latitude!,
+                                          tractor.longitude!));
+                                });
                                 // Get.bottomSheet(
                                 //     HireBottomSheet(
                                 //         user: _authController.allTractors

@@ -27,6 +27,7 @@ mixin _$UserModel {
   String? get userType => throw _privateConstructorUsedError;
   double? get latitude => throw _privateConstructorUsedError;
   double? get longitude => throw _privateConstructorUsedError;
+  List<String>? get requests => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,7 +47,8 @@ abstract class $UserModelCopyWith<$Res> {
       String? phoneNumber,
       String? userType,
       double? latitude,
-      double? longitude});
+      double? longitude,
+      List<String>? requests});
 }
 
 /// @nodoc
@@ -69,6 +71,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? userType = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? requests = freezed,
   }) {
     return _then(_value.copyWith(
       uid: freezed == uid
@@ -99,6 +102,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      requests: freezed == requests
+          ? _value.requests
+          : requests // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -118,7 +125,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? phoneNumber,
       String? userType,
       double? latitude,
-      double? longitude});
+      double? longitude,
+      List<String>? requests});
 }
 
 /// @nodoc
@@ -139,6 +147,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? userType = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? requests = freezed,
   }) {
     return _then(_$UserModelImpl(
       uid: freezed == uid
@@ -169,6 +178,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      requests: freezed == requests
+          ? _value._requests
+          : requests // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -183,7 +196,9 @@ class _$UserModelImpl implements _UserModel {
       this.phoneNumber,
       this.userType,
       this.latitude,
-      this.longitude});
+      this.longitude,
+      final List<String>? requests})
+      : _requests = requests;
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -202,10 +217,19 @@ class _$UserModelImpl implements _UserModel {
   final double? latitude;
   @override
   final double? longitude;
+  final List<String>? _requests;
+  @override
+  List<String>? get requests {
+    final value = _requests;
+    if (value == null) return null;
+    if (_requests is EqualUnmodifiableListView) return _requests;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, userType: $userType, latitude: $latitude, longitude: $longitude)';
+    return 'UserModel(uid: $uid, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, userType: $userType, latitude: $latitude, longitude: $longitude, requests: $requests)';
   }
 
   @override
@@ -224,13 +248,22 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude));
+                other.longitude == longitude) &&
+            const DeepCollectionEquality().equals(other._requests, _requests));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, fullName, email,
-      phoneNumber, userType, latitude, longitude);
+  int get hashCode => Object.hash(
+      runtimeType,
+      uid,
+      fullName,
+      email,
+      phoneNumber,
+      userType,
+      latitude,
+      longitude,
+      const DeepCollectionEquality().hash(_requests));
 
   @JsonKey(ignore: true)
   @override
@@ -254,7 +287,8 @@ abstract class _UserModel implements UserModel {
       final String? phoneNumber,
       final String? userType,
       final double? latitude,
-      final double? longitude}) = _$UserModelImpl;
+      final double? longitude,
+      final List<String>? requests}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -273,6 +307,8 @@ abstract class _UserModel implements UserModel {
   double? get latitude;
   @override
   double? get longitude;
+  @override
+  List<String>? get requests;
   @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>

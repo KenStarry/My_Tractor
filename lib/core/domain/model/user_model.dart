@@ -13,7 +13,8 @@ class UserModel with _$UserModel {
       String? phoneNumber,
       String? userType,
       double? latitude,
-      double? longitude}) = _UserModel;
+      double? longitude,
+      List<String>? requests}) = _UserModel;
 
   factory UserModel.fromJson(Map<String, Object?> json) =>
       _$UserModelFromJson(json);

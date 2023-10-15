@@ -1,60 +1,105 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-class MyInfoWindow extends StatelessWidget {
-  const MyInfoWindow({super.key});
+import '../../../core/presentation/controller/auth_controller.dart';
+
+class MyInfoWindow extends StatefulWidget {
+  final String tractorOwnerId;
+  final String currentUserId;
+
+  const MyInfoWindow(
+      {super.key, required this.tractorOwnerId, required this.currentUserId});
+
+  @override
+  State<MyInfoWindow> createState() => _MyInfoWindowState();
+}
+
+class _MyInfoWindowState extends State<MyInfoWindow> {
+  late final AuthController _authController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _authController = Get.find<AuthController>();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 150,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(12)
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: Theme.of(context).primaryColor.withOpacity(0.3),
-            ),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.asset(
-                  'assets/images/tractor.png',
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.contain,
-                )),
-          ),
-
-          Text("Starry", style: Theme.of(context).textTheme.bodyLarge),
-
-          TextButton(onPressed: (){},
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).primaryColorDark,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor
+    return Column(
+      children: [
+        Container(
+          width: 150,
+          height: 150,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(12)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Theme.of(context).primaryColor.withOpacity(0.3),
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.asset(
+                      'assets/images/tractor.png',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.contain,
+                    )),
               ),
-              child: Text(
-            "Hire Tractor",
-            style: TextStyle(
-                fontSize: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .fontSize,
-                fontWeight: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .fontWeight,
-                color: Theme.of(context).primaryColorDark),
-          ))
-        ],
-      ),
+              Text("Starry", style: Theme.of(context).textTheme.bodyLarge),
+              TextButton(
+                  onPressed: () async {
+                    //  add the request to list of request for the tractor owner
+                    final tractorOwnerDetails =
+                        await _authController.getSpecificUserFromFirestore(
+                            uid: widget.tractorOwnerId);
+
+                    final tractorRequests = [...tractorOwnerDetails.requests!];
+
+                    if (!tractorRequests.contains(widget.currentUserId)) {
+                      tractorRequests.add(widget.currentUserId);
+                    }
+
+                    await _authController.updateUserData(
+                        newUser: tractorOwnerDetails.copyWith(
+                            requests: tractorRequests),
+                        uid: widget.tractorOwnerId);
+                  },
+                  style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).primaryColorDark,
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor),
+                  child: Text(
+                    "Hire Tractor",
+                    style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
+                        fontWeight:
+                            Theme.of(context).textTheme.bodyMedium!.fontWeight,
+                        color: Theme.of(context).primaryColorDark),
+                  ))
+            ],
+          ),
+        ),
+        ClipPath(
+          clipper: TriangleClipper(),
+          child: Container(
+            width: 20,
+            height: 20,
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
+        )
+      ],
     );
   }
 }
