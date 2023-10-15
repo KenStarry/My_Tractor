@@ -73,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void setCustomMarkerIcon() async {
     final Uint8List icon =
-    await getBytesFromAsset("assets/images/tractor.png", 120);
+        await getBytesFromAsset("assets/images/tractor.png", 120);
     markerIcon = BitmapDescriptor.fromBytes(icon);
   }
 
@@ -101,9 +101,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme
-            .of(context)
-            .scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Column(
             children: [
@@ -114,43 +112,38 @@ class _MapScreenState extends State<MapScreen> {
                       bottomLeft: Radius.circular(32)),
                   child: currentUserLocation == null
                       ? Center(
-                    child: UnconstrainedBox(
-                      child: CircularProgressIndicator(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                      ),
-                    ),
-                  )
+                          child: UnconstrainedBox(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        )
                       : Obx(
-                        () =>
-                        GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                              target: LatLng(currentUserLocation!.latitude!,
-                                  currentUserLocation!.longitude!),
-                              zoom: 13.0),
-                          polylines: {
-                            Polyline(
-                                polylineId: const PolylineId("route"),
-                                points: polylineCoordinates,
-                                color: Theme
-                                    .of(context)
-                                    .primaryColor,
-                                width: 5)
-                          },
-                          markers: _authController.allTractors
-                              .map((tractor) =>
-                              Marker(
-                                  markerId: const MarkerId("currentLocation"),
-                                  icon: markerIcon,
-                                  position: LatLng(
-                                      tractor.latitude!, tractor.longitude!)))
-                              .toSet(),
-                          onMapCreated: (controller) {
-                            _mapController.complete(controller);
-                          },
+                          () => GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                                target: LatLng(currentUserLocation!.latitude!,
+                                    currentUserLocation!.longitude!),
+                                zoom: 13.0),
+                            polylines: {
+                              Polyline(
+                                  polylineId: const PolylineId("route"),
+                                  points: polylineCoordinates,
+                                  color: Theme.of(context).primaryColor,
+                                  width: 5)
+                            },
+                            markers: _authController.allTractors
+                                .map((tractor) => Marker(
+                                    markerId: const MarkerId("currentLocation"),
+                                    icon: markerIcon,
+                                    position: LatLng(
+                                        tractor.latitude!, tractor.longitude!),
+                                    onTap: () {}))
+                                .toSet(),
+                            onMapCreated: (controller) {
+                              _mapController.complete(controller);
+                            },
+                          ),
                         ),
-                  ),
                 ),
               ),
               Container(
@@ -161,33 +154,27 @@ class _MapScreenState extends State<MapScreen> {
                   borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(24),
                       topLeft: Radius.circular(24)),
-                  color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 child: Column(
                   children: [
                     Text(
                       "Tractors",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleSmall,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     Expanded(
                       child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
-                            final tractor = _authController.allTractors
-                                .elementAt(index);
+                            final tractor =
+                                _authController.allTractors.elementAt(index);
                             return TractorCard(
-                              ownerName: tractor
-                                  .fullName!,
+                              ownerName: tractor.fullName!,
                               onClick: () {
                                 googleMapController.animateCamera(
-                                    CameraUpdate.newLatLng(
-                                        LatLng(tractor.latitude!,
-                                            tractor.longitude!)));
+                                    CameraUpdate.newLatLng(LatLng(
+                                        tractor.latitude!,
+                                        tractor.longitude!)));
                                 // Get.bottomSheet(
                                 //     HireBottomSheet(
                                 //         user: _authController.allTractors
@@ -204,10 +191,9 @@ class _MapScreenState extends State<MapScreen> {
                               },
                             );
                           },
-                          separatorBuilder: (context, index) =>
-                          const SizedBox(
-                            width: 8,
-                          ),
+                          separatorBuilder: (context, index) => const SizedBox(
+                                width: 8,
+                              ),
                           itemCount: _authController.allTractors.length),
                     )
                   ],
