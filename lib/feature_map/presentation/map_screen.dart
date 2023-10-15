@@ -12,6 +12,7 @@ import 'package:location/location.dart';
 
 import '../../core/presentation/controller/auth_controller.dart';
 import '../../core/util/constants.dart';
+import 'components/tractor_card.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -105,9 +106,8 @@ class _MapScreenState extends State<MapScreen> {
               Expanded(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(32),
-                    bottomLeft: Radius.circular(32)
-                  ),
+                      bottomRight: Radius.circular(32),
+                      bottomLeft: Radius.circular(32)),
                   child: currentUserLocation == null
                       ? Center(
                           child: UnconstrainedBox(
@@ -145,7 +145,7 @@ class _MapScreenState extends State<MapScreen> {
               ),
               Container(
                 width: double.infinity,
-                height: 150,
+                height: 180,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
@@ -158,6 +158,19 @@ class _MapScreenState extends State<MapScreen> {
                     Text(
                       "Tractors",
                       style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => TractorCard(
+                                ownerName: _authController.allTractors
+                                    .elementAt(index)
+                                    .fullName!,
+                              ),
+                          separatorBuilder: (context, index) => const SizedBox(
+                                width: 8,
+                              ),
+                          itemCount: _authController.allTractors.length),
                     )
                   ],
                 ),
