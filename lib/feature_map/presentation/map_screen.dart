@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -13,6 +14,7 @@ import 'package:location/location.dart';
 import '../../core/presentation/controller/auth_controller.dart';
 import '../../core/util/constants.dart';
 import 'components/hire_bottomsheet.dart';
+import 'components/my_info_window.dart';
 import 'components/tractor_card.dart';
 
 class MapScreen extends StatefulWidget {
@@ -25,6 +27,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   late final Completer<GoogleMapController> _mapController;
   late final GoogleMapController googleMapController;
+  late final CustomInfoWindowController _customInfoWindowController;
   late final AuthController _authController;
 
   static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
@@ -41,6 +44,7 @@ class _MapScreenState extends State<MapScreen> {
     super.initState();
 
     _authController = Get.find<AuthController>();
+    _customInfoWindowController = CustomInfoWindowController();
     _mapController = Completer();
     getPolylinePoints();
     setCustomMarkerIcon();
@@ -119,29 +123,54 @@ class _MapScreenState extends State<MapScreen> {
                           ),
                         )
                       : Obx(
-                          () => GoogleMap(
-                            initialCameraPosition: CameraPosition(
-                                target: LatLng(currentUserLocation!.latitude!,
-                                    currentUserLocation!.longitude!),
-                                zoom: 13.0),
-                            polylines: {
-                              Polyline(
-                                  polylineId: const PolylineId("route"),
-                                  points: polylineCoordinates,
-                                  color: Theme.of(context).primaryColor,
-                                  width: 5)
-                            },
-                            markers: _authController.allTractors
-                                .map((tractor) => Marker(
-                                    markerId: const MarkerId("currentLocation"),
-                                    icon: markerIcon,
-                                    position: LatLng(
-                                        tractor.latitude!, tractor.longitude!),
-                                    onTap: () {}))
-                                .toSet(),
-                            onMapCreated: (controller) {
-                              _mapController.complete(controller);
-                            },
+                          () => Stack(
+                            children: [
+                              GoogleMap(
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(
+                                        currentUserLocation!.latitude!,
+                                        currentUserLocation!.longitude!),
+                                    zoom: 13.0),
+                                onTap: (position){
+                                  _customInfoWindowController.hideInfoWindow!();
+                                },
+                                onCameraMove: (position){
+                                  _customInfoWindowController.onCameraMove!();
+                                },
+                                polylines: {
+                                  Polyline(
+                                      polylineId: const PolylineId("route"),
+                                      points: polylineCoordinates,
+                                      color: Theme.of(context).primaryColor,
+                                      width: 5)
+                                },
+                                markers: _authController.allTractors
+                                    .map((tractor) => Marker(
+                                        markerId:
+                                            const MarkerId("currentLocation"),
+                                        icon: markerIcon,
+                                        position: LatLng(tractor.latitude!,
+                                            tractor.longitude!),
+                                        onTap: () {
+                                          _customInfoWindowController
+                                                  .addInfoWindow!(
+                                              MyInfoWindow(),
+                                              LatLng(tractor.latitude!,
+                                                  tractor.longitude!));
+                                        }))
+                                    .toSet(),
+                                onMapCreated: (controller) {
+                                  _mapController.complete(controller);
+                                  _customInfoWindowController.googleMapController = controller;
+                                },
+                              ),
+                              CustomInfoWindow(
+                                controller: _customInfoWindowController,
+                                height: 150,
+                                width: 150,
+                                offset: 50,
+                              )
+                            ],
                           ),
                         ),
                 ),
