@@ -44,6 +44,7 @@ class _MapScreenState extends State<MapScreen> {
     _mapController = Completer();
     getPolylinePoints();
     setCustomMarkerIcon();
+    completeMap();
 
     getCurrentLocation().listen((location) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -72,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void setCustomMarkerIcon() async {
     final Uint8List icon =
-        await getBytesFromAsset("assets/images/tractor.png", 120);
+    await getBytesFromAsset("assets/images/tractor.png", 120);
     markerIcon = BitmapDescriptor.fromBytes(icon);
   }
 
@@ -100,7 +101,9 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme
+            .of(context)
+            .scaffoldBackgroundColor,
         body: SafeArea(
           child: Column(
             children: [
@@ -111,37 +114,43 @@ class _MapScreenState extends State<MapScreen> {
                       bottomLeft: Radius.circular(32)),
                   child: currentUserLocation == null
                       ? Center(
-                          child: UnconstrainedBox(
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        )
+                    child: UnconstrainedBox(
+                      child: CircularProgressIndicator(
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
+                      ),
+                    ),
+                  )
                       : Obx(
-                          () => GoogleMap(
-                            initialCameraPosition: CameraPosition(
-                                target: LatLng(currentUserLocation!.latitude!,
-                                    currentUserLocation!.longitude!),
-                                zoom: 13.0),
-                            polylines: {
-                              Polyline(
-                                  polylineId: const PolylineId("route"),
-                                  points: polylineCoordinates,
-                                  color: Theme.of(context).primaryColor,
-                                  width: 5)
-                            },
-                            markers: _authController.allTractors
-                                .map((tractor) => Marker(
-                                    markerId: const MarkerId("currentLocation"),
-                                    icon: markerIcon,
-                                    position: LatLng(
-                                        tractor.latitude!, tractor.longitude!)))
-                                .toSet(),
-                            onMapCreated: (controller) {
-                              _mapController.complete(controller);
-                            },
-                          ),
+                        () =>
+                        GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                              target: LatLng(currentUserLocation!.latitude!,
+                                  currentUserLocation!.longitude!),
+                              zoom: 13.0),
+                          polylines: {
+                            Polyline(
+                                polylineId: const PolylineId("route"),
+                                points: polylineCoordinates,
+                                color: Theme
+                                    .of(context)
+                                    .primaryColor,
+                                width: 5)
+                          },
+                          markers: _authController.allTractors
+                              .map((tractor) =>
+                              Marker(
+                                  markerId: const MarkerId("currentLocation"),
+                                  icon: markerIcon,
+                                  position: LatLng(
+                                      tractor.latitude!, tractor.longitude!)))
+                              .toSet(),
+                          onMapCreated: (controller) {
+                            _mapController.complete(controller);
+                          },
                         ),
+                  ),
                 ),
               ),
               Container(
@@ -152,39 +161,53 @@ class _MapScreenState extends State<MapScreen> {
                   borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(24),
                       topLeft: Radius.circular(24)),
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: Theme
+                      .of(context)
+                      .scaffoldBackgroundColor,
                 ),
                 child: Column(
                   children: [
                     Text(
                       "Tractors",
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleSmall,
                     ),
                     Expanded(
                       child: ListView.separated(
                           scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => TractorCard(
-                                ownerName: _authController.allTractors
-                                    .elementAt(index)
-                                    .fullName!,
-                                onClick: () {
-                                  Get.bottomSheet(
-                                      HireBottomSheet(
-                                          user: _authController.allTractors
-                                              .elementAt(index)),
-                                      backgroundColor: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      ignoreSafeArea: false,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(24),
-                                              topRight: Radius.circular(24))),
-                                      isScrollControlled: true);
-                                },
-                              ),
-                          separatorBuilder: (context, index) => const SizedBox(
-                                width: 8,
-                              ),
+                          itemBuilder: (context, index) {
+                            final tractor = _authController.allTractors
+                                .elementAt(index);
+                            return TractorCard(
+                              ownerName: tractor
+                                  .fullName!,
+                              onClick: () {
+                                googleMapController.animateCamera(
+                                    CameraUpdate.newLatLng(
+                                        LatLng(tractor.latitude!,
+                                            tractor.longitude!)));
+                                // Get.bottomSheet(
+                                //     HireBottomSheet(
+                                //         user: _authController.allTractors
+                                //             .elementAt(index)),
+                                //     backgroundColor: Theme
+                                //         .of(context)
+                                //         .scaffoldBackgroundColor,
+                                //     ignoreSafeArea: false,
+                                //     shape: const RoundedRectangleBorder(
+                                //         borderRadius: BorderRadius.only(
+                                //             topLeft: Radius.circular(24),
+                                //             topRight: Radius.circular(24))),
+                                //     isScrollControlled: true);
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                          const SizedBox(
+                            width: 8,
+                          ),
                           itemCount: _authController.allTractors.length),
                     )
                   ],
