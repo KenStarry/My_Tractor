@@ -49,6 +49,8 @@ class AuthController extends GetxController {
   Future<UserModel> getSpecificUserFromFirestore({String? uid}) async =>
       await authUseCase.getSpecificUserFromFirestore.call(uid: uid);
 
+  Stream getAllUsersFromFirestore() => authUseCase.getAllUsersFromFirestore();
+
   Future<void> updateUserData(
           {required UserModel newUser,
           required String uid,
