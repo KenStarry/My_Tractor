@@ -32,7 +32,7 @@ abstract class AuthRepository {
   Future<UserModel> getSpecificUserFromFirestore({String? uid});
 
   /// Get All Users From Firestore
-  Stream getAllUsersFromFirestore();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFirestore();
 
   /// Update User Data In Firestore
   Future<void> updateUserDataInFirestore(

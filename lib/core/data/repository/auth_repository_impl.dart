@@ -113,7 +113,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Stream getAllUsersFromFirestore() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFirestore() {
     return firestore
         .collection('Users')
         .where('userType', isEqualTo: 'Publish')

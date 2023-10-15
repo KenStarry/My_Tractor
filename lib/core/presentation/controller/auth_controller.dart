@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:my_tractor/core/domain/use_case/auth_use_cases.dart';
 import 'package:my_tractor/di/locator.dart';
@@ -10,6 +11,7 @@ class AuthController extends GetxController {
   final authUseCase = locator.get<AuthUseCases>();
 
   final userModel = Rxn<UserModel>();
+  final allTractors = <UserModel>[].obs;
   final isLoggedIn = false.obs;
 
   @override
@@ -18,6 +20,15 @@ class AuthController extends GetxController {
 
     authState().listen((user) {
       isLoggedIn.value = user != null;
+    });
+
+    getAllUsersFromFirestore().listen((snapshots) {
+      final tractors = snapshots.docs
+          .map(
+              (snapshotDocument) => UserModel.fromJson(snapshotDocument.data()))
+          .toList();
+
+      allTractors.value = tractors;
     });
   }
 
@@ -49,7 +60,8 @@ class AuthController extends GetxController {
   Future<UserModel> getSpecificUserFromFirestore({String? uid}) async =>
       await authUseCase.getSpecificUserFromFirestore.call(uid: uid);
 
-  Stream getAllUsersFromFirestore() => authUseCase.getAllUsersFromFirestore();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFirestore() =>
+      authUseCase.getAllUsersFromFirestore();
 
   Future<void> updateUserData(
           {required UserModel newUser,
