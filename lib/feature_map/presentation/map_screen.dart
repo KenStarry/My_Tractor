@@ -12,6 +12,7 @@ import 'package:location/location.dart';
 
 import '../../core/presentation/controller/auth_controller.dart';
 import '../../core/util/constants.dart';
+import 'components/hire_bottomsheet.dart';
 import 'components/tractor_card.dart';
 
 class MapScreen extends StatefulWidget {
@@ -166,6 +167,20 @@ class _MapScreenState extends State<MapScreen> {
                                 ownerName: _authController.allTractors
                                     .elementAt(index)
                                     .fullName!,
+                                onClick: () {
+                                  Get.bottomSheet(
+                                      HireBottomSheet(
+                                          user: _authController.allTractors
+                                              .elementAt(index)),
+                                      backgroundColor: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      ignoreSafeArea: false,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(24),
+                                              topRight: Radius.circular(24))),
+                                      isScrollControlled: true);
+                                },
                               ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 width: 8,
