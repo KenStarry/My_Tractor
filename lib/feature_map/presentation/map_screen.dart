@@ -104,10 +104,17 @@ class _MapScreenState extends State<MapScreen> {
             children: [
               Expanded(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(32),
+                  borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(32),
+                    bottomLeft: Radius.circular(32)
+                  ),
                   child: currentUserLocation == null
-                      ? CircularProgressIndicator(
-                          color: Theme.of(context).primaryColor,
+                      ? Center(
+                          child: UnconstrainedBox(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
                         )
                       : Obx(
                           () => GoogleMap(
@@ -126,7 +133,8 @@ class _MapScreenState extends State<MapScreen> {
                                 .map((tractor) => Marker(
                                     markerId: const MarkerId("currentLocation"),
                                     icon: markerIcon,
-                                    position: LatLng(tractor.latitude!, tractor.longitude!)))
+                                    position: LatLng(
+                                        tractor.latitude!, tractor.longitude!)))
                                 .toSet(),
                             onMapCreated: (controller) {
                               _mapController.complete(controller);
