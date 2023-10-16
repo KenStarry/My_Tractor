@@ -82,8 +82,22 @@ class _RequestCardState extends State<RequestCard> {
                   children: widget.isPending
                       ? [
                           GestureDetector(
-                            onTap: () {
-                              //  add request to accepted
+                            onTap: () async {
+                              //  add the request to list of request for the tractor owner
+                              final tractorOwnerDetails =
+                                  await _authController.getSpecificUserFromFirestore();
+
+                              final tractorAcceptedRequests = [...tractorOwnerDetails.acceptedRequests!];
+                              final tractorRequests = [...tractorOwnerDetails.requests!];
+
+                              if (!tractorAcceptedRequests.contains(widget.uid)) {
+                                tractorAcceptedRequests.add(widget.uid);
+                                tractorRequests.removeWhere((id) => id == widget.uid);
+                              }
+
+                              await _authController.updateUserData(
+                                  newUser: tractorOwnerDetails.copyWith(
+                                      acceptedRequests: tractorAcceptedRequests));
                             },
                             child: Container(
                               width: 50,
@@ -99,15 +113,32 @@ class _RequestCardState extends State<RequestCard> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.redAccent.withOpacity(0.1),
+                          GestureDetector(
+                            onTap: () async {
+                              //  delete the request to list of request for the tractor owner
+                              final tractorOwnerDetails =
+                                  await _authController.getSpecificUserFromFirestore();
+
+                              final tractorRequests = [...tractorOwnerDetails.requests!];
+
+                              if (tractorRequests.contains(widget.uid)) {
+                                tractorRequests.removeWhere((id) => id == widget.uid);
+                              }
+
+                              await _authController.updateUserData(
+                                  newUser: tractorOwnerDetails.copyWith(
+                                      requests: tractorRequests));
+                            },
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.redAccent.withOpacity(0.1),
+                              ),
+                              child: const Icon(Icons.cancel_outlined,
+                                  color: Colors.redAccent),
                             ),
-                            child: const Icon(Icons.cancel_outlined,
-                                color: Colors.redAccent),
                           )
                         ]
                       : [

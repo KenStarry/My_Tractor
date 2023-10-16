@@ -8,8 +8,7 @@ class UpdateUserData {
   final repo = locator.get<AuthRepository>();
 
   Future<void> call(
-          {required UserModel newUser,
-          required String uid,
+          {required UserModel newUser, String? uid,
           Function(ResponseState response, String? error)? response}) async =>
       await repo.updateUserDataInFirestore(
           newUser: newUser, uid: uid, response: response);
