@@ -124,12 +124,35 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                child: ListView.separated(
-                    itemBuilder: (context, index) =>
-                        RequestCard(uid: user.requests![index]),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 8),
-                    itemCount: user.requests!.length),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Accepted",
+                        style: Theme.of(context).textTheme.titleMedium),
+                    Expanded(
+                      child: user.acceptedRequests!.isEmpty
+                          ? const Center(
+                              child: Text("No requests accepted yet"),
+                            )
+                          : ListView.separated(
+                              itemBuilder: (context, index) => RequestCard(
+                                  uid: user.acceptedRequests![index]),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 8),
+                              itemCount: user.acceptedRequests!.length),
+                    ),
+                    Text("Pending",
+                        style: Theme.of(context).textTheme.titleMedium),
+                    Expanded(
+                      child: ListView.separated(
+                          itemBuilder: (context, index) =>
+                              RequestCard(uid: user.requests![index]),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 8),
+                          itemCount: user.requests!.length),
+                    ),
+                  ],
+                ),
               ),
             )),
           );

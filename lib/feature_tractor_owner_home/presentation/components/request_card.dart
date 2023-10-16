@@ -55,7 +55,8 @@ class _RequestCardState extends State<RequestCard> {
                       height: 50,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.1)),
                       child: Center(
                         child: Text(user.fullName![0],
                             style: Theme.of(context).textTheme.titleMedium),
@@ -81,10 +82,10 @@ class _RequestCardState extends State<RequestCard> {
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: Colors.green.withOpacity(0.1),
+                        color: Theme.of(context).primaryColor.withOpacity(0.1),
                       ),
-                      child:
-                          const Icon(Icons.done_rounded, color: Colors.green),
+                      child: Icon(Icons.done_rounded,
+                          color: Theme.of(context).primaryColor),
                     ),
                     const SizedBox(width: 8),
                     Container(
