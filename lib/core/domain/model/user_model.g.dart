@@ -15,6 +15,9 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       userType: json['userType'] as String?,
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
+      acceptedRequests: (json['acceptedRequests'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       requests: (json['requests'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -29,5 +32,6 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'userType': instance.userType,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'acceptedRequests': instance.acceptedRequests,
       'requests': instance.requests,
     };

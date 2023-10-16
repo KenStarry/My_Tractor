@@ -14,6 +14,7 @@ class UserModel with _$UserModel {
       String? userType,
       double? latitude,
       double? longitude,
+      List<String>? acceptedRequests,
       List<String>? requests}) = _UserModel;
 
   factory UserModel.fromJson(Map<String, Object?> json) =>

@@ -184,15 +184,17 @@ class _SignUpState extends State<SignUp> {
                                   _authController.selectedUserType.value !=
                                       null) {
                                 final user = UserModel(
-                                    uid: '',
-                                    fullName: _fullNameController.text,
-                                    email: _emailController.text,
-                                    phoneNumber: _phoneController.text,
-                                    userType:
-                                        _authController.selectedUserType.value,
-                                    latitude: 0.0,
-                                    longitude: 0.0,
-                                    requests: []);
+                                  uid: '',
+                                  fullName: _fullNameController.text,
+                                  email: _emailController.text,
+                                  phoneNumber: _phoneController.text,
+                                  userType:
+                                      _authController.selectedUserType.value,
+                                  latitude: 0.0,
+                                  longitude: 0.0,
+                                  acceptedRequests: [],
+                                  requests: [],
+                                );
 
                                 await _authController.createAccount(
                                     userModel: user,

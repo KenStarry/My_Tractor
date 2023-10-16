@@ -27,6 +27,7 @@ mixin _$UserModel {
   String? get userType => throw _privateConstructorUsedError;
   double? get latitude => throw _privateConstructorUsedError;
   double? get longitude => throw _privateConstructorUsedError;
+  List<String>? get acceptedRequests => throw _privateConstructorUsedError;
   List<String>? get requests => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $UserModelCopyWith<$Res> {
       String? userType,
       double? latitude,
       double? longitude,
+      List<String>? acceptedRequests,
       List<String>? requests});
 }
 
@@ -71,6 +73,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? userType = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? acceptedRequests = freezed,
     Object? requests = freezed,
   }) {
     return _then(_value.copyWith(
@@ -102,6 +105,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      acceptedRequests: freezed == acceptedRequests
+          ? _value.acceptedRequests
+          : acceptedRequests // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       requests: freezed == requests
           ? _value.requests
           : requests // ignore: cast_nullable_to_non_nullable
@@ -126,6 +133,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? userType,
       double? latitude,
       double? longitude,
+      List<String>? acceptedRequests,
       List<String>? requests});
 }
 
@@ -147,6 +155,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? userType = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? acceptedRequests = freezed,
     Object? requests = freezed,
   }) {
     return _then(_$UserModelImpl(
@@ -178,6 +187,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      acceptedRequests: freezed == acceptedRequests
+          ? _value._acceptedRequests
+          : acceptedRequests // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       requests: freezed == requests
           ? _value._requests
           : requests // ignore: cast_nullable_to_non_nullable
@@ -197,8 +210,10 @@ class _$UserModelImpl implements _UserModel {
       this.userType,
       this.latitude,
       this.longitude,
+      final List<String>? acceptedRequests,
       final List<String>? requests})
-      : _requests = requests;
+      : _acceptedRequests = acceptedRequests,
+        _requests = requests;
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -217,6 +232,17 @@ class _$UserModelImpl implements _UserModel {
   final double? latitude;
   @override
   final double? longitude;
+  final List<String>? _acceptedRequests;
+  @override
+  List<String>? get acceptedRequests {
+    final value = _acceptedRequests;
+    if (value == null) return null;
+    if (_acceptedRequests is EqualUnmodifiableListView)
+      return _acceptedRequests;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   final List<String>? _requests;
   @override
   List<String>? get requests {
@@ -229,7 +255,7 @@ class _$UserModelImpl implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, userType: $userType, latitude: $latitude, longitude: $longitude, requests: $requests)';
+    return 'UserModel(uid: $uid, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, userType: $userType, latitude: $latitude, longitude: $longitude, acceptedRequests: $acceptedRequests, requests: $requests)';
   }
 
   @override
@@ -249,6 +275,8 @@ class _$UserModelImpl implements _UserModel {
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
+            const DeepCollectionEquality()
+                .equals(other._acceptedRequests, _acceptedRequests) &&
             const DeepCollectionEquality().equals(other._requests, _requests));
   }
 
@@ -263,6 +291,7 @@ class _$UserModelImpl implements _UserModel {
       userType,
       latitude,
       longitude,
+      const DeepCollectionEquality().hash(_acceptedRequests),
       const DeepCollectionEquality().hash(_requests));
 
   @JsonKey(ignore: true)
@@ -288,6 +317,7 @@ abstract class _UserModel implements UserModel {
       final String? userType,
       final double? latitude,
       final double? longitude,
+      final List<String>? acceptedRequests,
       final List<String>? requests}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -307,6 +337,8 @@ abstract class _UserModel implements UserModel {
   double? get latitude;
   @override
   double? get longitude;
+  @override
+  List<String>? get acceptedRequests;
   @override
   List<String>? get requests;
   @override
