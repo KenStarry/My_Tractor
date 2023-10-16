@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -30,6 +31,7 @@ class _MapScreenState extends State<MapScreen> {
   late final GoogleMapController googleMapController;
   late final CustomInfoWindowController _customInfoWindowController;
   late final AuthController _authController;
+  late final FToast _toast;
 
   static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
   static const LatLng destination = LatLng(37.33429383, -122.06600055);
@@ -46,6 +48,10 @@ class _MapScreenState extends State<MapScreen> {
 
     _authController = Get.find<AuthController>();
     _customInfoWindowController = CustomInfoWindowController();
+
+    _toast = FToast();
+    _toast.init(context);
+
     _mapController = Completer();
     getPolylinePoints();
     setCustomMarkerIcon();
@@ -156,6 +162,7 @@ class _MapScreenState extends State<MapScreen> {
                                           _customInfoWindowController
                                                   .addInfoWindow!(
                                               MyInfoWindow(
+                                                toast: _toast,
                                                 tractorOwnerId: tractor.uid!,
                                                 currentUserId: _authController
                                                     .userModel.value!.uid!,
@@ -214,6 +221,7 @@ class _MapScreenState extends State<MapScreen> {
                                       .then((value) {
                                     _customInfoWindowController.addInfoWindow!(
                                         MyInfoWindow(
+                                          toast: _toast,
                                           tractorOwnerId: tractor.uid!,
                                           currentUserId: _authController
                                               .userModel.value!.uid!,
