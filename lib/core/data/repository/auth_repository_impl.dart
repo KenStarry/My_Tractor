@@ -43,6 +43,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<UserModel> getSpecificUserFromFirestore({String? uid}) async {
+
     try {
       final snapshot = await firestore
           .collection('Users')
