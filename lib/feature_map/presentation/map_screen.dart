@@ -198,48 +198,38 @@ class _MapScreenState extends State<MapScreen> {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     Expanded(
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            final tractor =
-                                _authController.allTractors.elementAt(index);
-                            return TractorCard(
-                              ownerName: tractor.fullName!,
-                              onClick: () {
-                                googleMapController
-                                    .animateCamera(CameraUpdate.newLatLng(
+                      child: Obx(
+                        () => ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final tractor =
+                                  _authController.allTractors.elementAt(index);
+                              return TractorCard(
+                                ownerName: tractor.fullName!,
+                                onClick: () {
+                                  googleMapController
+                                      .animateCamera(CameraUpdate.newLatLng(
+                                          LatLng(tractor.latitude!,
+                                              tractor.longitude!)))
+                                      .then((value) {
+                                    _customInfoWindowController.addInfoWindow!(
+                                        MyInfoWindow(
+                                          tractorOwnerId: tractor.uid!,
+                                          currentUserId: _authController
+                                              .userModel.value!.uid!,
+                                        ),
                                         LatLng(tractor.latitude!,
-                                            tractor.longitude!)))
-                                    .then((value) {
-                                  _customInfoWindowController.addInfoWindow!(
-                                      MyInfoWindow(
-                                        tractorOwnerId: tractor.uid!,
-                                        currentUserId: _authController
-                                            .userModel.value!.uid!,
-                                      ),
-                                      LatLng(tractor.latitude!,
-                                          tractor.longitude!));
-                                });
-                                // Get.bottomSheet(
-                                //     HireBottomSheet(
-                                //         user: _authController.allTractors
-                                //             .elementAt(index)),
-                                //     backgroundColor: Theme
-                                //         .of(context)
-                                //         .scaffoldBackgroundColor,
-                                //     ignoreSafeArea: false,
-                                //     shape: const RoundedRectangleBorder(
-                                //         borderRadius: BorderRadius.only(
-                                //             topLeft: Radius.circular(24),
-                                //             topRight: Radius.circular(24))),
-                                //     isScrollControlled: true);
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(
-                                width: 8,
-                              ),
-                          itemCount: _authController.allTractors.length),
+                                            tractor.longitude!));
+                                  });
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                            itemCount: _authController.allTractors.length),
+                      ),
                     )
                   ],
                 ),

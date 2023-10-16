@@ -18,6 +18,7 @@ class MyInfoWindow extends StatefulWidget {
 
 class _MyInfoWindowState extends State<MyInfoWindow> {
   late final AuthController _authController;
+  // late final FToa
 
   @override
   void initState() {
@@ -73,7 +74,9 @@ class _MyInfoWindowState extends State<MyInfoWindow> {
                     await _authController.updateUserData(
                         newUser: tractorOwnerDetails.copyWith(
                             requests: tractorRequests),
-                        uid: widget.tractorOwnerId);
+                        uid: widget.tractorOwnerId).then((value) {
+
+                    });
                   },
                   style: TextButton.styleFrom(
                       foregroundColor: Theme.of(context).primaryColorDark,
