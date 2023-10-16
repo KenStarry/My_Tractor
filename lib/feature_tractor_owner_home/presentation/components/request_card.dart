@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 
 class RequestCard extends StatefulWidget {
   final String uid;
+  final bool isPending;
 
-  const RequestCard({super.key, required this.uid});
+  const RequestCard({super.key, required this.uid, required this.isPending});
 
   @override
   State<RequestCard> createState() => _RequestCardState();
@@ -76,29 +77,44 @@ class _RequestCardState extends State<RequestCard> {
                   ],
                 ),
                 Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
-                      ),
-                      child: Icon(Icons.done_rounded,
-                          color: Theme.of(context).primaryColor),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.redAccent.withOpacity(0.1),
-                      ),
-                      child: const Icon(Icons.cancel_outlined,
-                          color: Colors.redAccent),
-                    )
-                  ],
+                  children: widget.isPending
+                      ? [
+                          GestureDetector(
+                            onTap: (){
+                              //  add request to accepted
+
+                            },
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.1),
+                              ),
+                              child: Icon(Icons.done_rounded,
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.redAccent.withOpacity(0.1),
+                            ),
+                            child: const Icon(Icons.cancel_outlined,
+                                color: Colors.redAccent),
+                          )
+                        ]
+                      : [
+                          Text(
+                            "Approved",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          )
+                        ],
                 )
               ],
             ),

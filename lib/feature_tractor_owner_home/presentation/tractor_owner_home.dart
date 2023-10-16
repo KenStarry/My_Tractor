@@ -136,7 +136,7 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                             )
                           : ListView.separated(
                               itemBuilder: (context, index) => RequestCard(
-                                  uid: user.acceptedRequests![index]),
+                                  uid: user.acceptedRequests![index], isPending: false),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(height: 8),
                               itemCount: user.acceptedRequests!.length),
@@ -148,7 +148,7 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                         child: Text("No pending requests"),
                       ) : ListView.separated(
                           itemBuilder: (context, index) =>
-                              RequestCard(uid: user.requests![index]),
+                              RequestCard(uid: user.requests![index], isPending: true,),
                           separatorBuilder: (context, index) =>
                               const SizedBox(height: 8),
                           itemCount: user.requests!.length),
