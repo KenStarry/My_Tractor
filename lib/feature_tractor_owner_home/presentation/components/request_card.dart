@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_tractor/core/domain/model/user_model.dart';
 import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
 import 'package:get/get.dart';
 
@@ -24,8 +25,8 @@ class _RequestCardState extends State<RequestCard> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _authController.getSpecificUserFromFirestore(uid: widget.uid),
+    return StreamBuilder(
+        stream: _authController.listenToUserData(uid: widget.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return UnconstrainedBox(
@@ -38,7 +39,8 @@ class _RequestCardState extends State<RequestCard> {
             return const Center(child: Text("No Data found!"));
           }
 
-          final user = snapshot.data!;
+          final user =
+              UserModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
 
           return Container(
             width: double.infinity,
@@ -80,9 +82,8 @@ class _RequestCardState extends State<RequestCard> {
                   children: widget.isPending
                       ? [
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               //  add request to accepted
-
                             },
                             child: Container(
                               width: 50,

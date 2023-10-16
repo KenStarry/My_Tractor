@@ -5,6 +5,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
 import 'package:my_tractor/feature_tractor_owner_home/presentation/components/request_card.dart';
 
+import '../../core/domain/model/user_model.dart';
+
 class TractorOwnerHome extends StatefulWidget {
   const TractorOwnerHome({super.key});
 
@@ -50,8 +52,8 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _authController.getSpecificUserFromFirestore(),
+    return StreamBuilder(
+        stream: _authController.listenToUserData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
@@ -67,7 +69,9 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
             return const Center(child: Text("No Data found!"));
           }
 
-          final user = snapshot.data!;
+          final user =
+          UserModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _authController.setUserModel(user: user);
           });
