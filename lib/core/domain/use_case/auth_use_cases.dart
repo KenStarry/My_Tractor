@@ -6,6 +6,7 @@ import 'package:my_tractor/core/domain/use_case/update_user_data.dart';
 import 'auth_state.dart';
 import 'get_all_users_from_firestore.dart';
 import 'get_specific_user_from_firestore.dart';
+import 'listen_to_user_data.dart';
 
 class AuthUseCases {
   final CreateAccount createAccount;
@@ -15,6 +16,7 @@ class AuthUseCases {
   final GetSpecificUserFromFirestore getSpecificUserFromFirestore;
   final UpdateUserData updateUserData;
   final GetAllUsersFromFirestore getAllUsersFromFirestore;
+  final ListenToUserData listenToUserData;
 
   AuthUseCases(
       {required this.createAccount,
@@ -23,5 +25,6 @@ class AuthUseCases {
       required this.signOut,
       required this.getSpecificUserFromFirestore,
       required this.updateUserData,
-      required this.getAllUsersFromFirestore});
+      required this.getAllUsersFromFirestore,
+      required this.listenToUserData});
 }

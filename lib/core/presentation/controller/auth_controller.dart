@@ -27,7 +27,8 @@ class AuthController extends GetxController {
       final tractors = snapshots.docs
           .map(
               (snapshotDocument) => UserModel.fromJson(snapshotDocument.data()))
-          .toList().toSet();
+          .toList()
+          .toSet();
 
       allTractors.value = tractors;
     });
@@ -60,6 +61,9 @@ class AuthController extends GetxController {
 
   Future<UserModel> getSpecificUserFromFirestore({String? uid}) async =>
       await authUseCase.getSpecificUserFromFirestore.call(uid: uid);
+
+  Stream<DocumentSnapshot> listenToUserData({String? uid}) =>
+      authUseCase.listenToUserData(uid: uid);
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFirestore() =>
       authUseCase.getAllUsersFromFirestore();

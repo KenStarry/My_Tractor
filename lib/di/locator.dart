@@ -5,6 +5,7 @@ import 'package:my_tractor/core/domain/use_case/auth_state.dart';
 import 'package:my_tractor/core/domain/use_case/auth_use_cases.dart';
 import 'package:my_tractor/core/domain/use_case/create_account.dart';
 import 'package:my_tractor/core/domain/use_case/get_specific_user_from_firestore.dart';
+import 'package:my_tractor/core/domain/use_case/listen_to_user_data.dart';
 import 'package:my_tractor/core/domain/use_case/sign_in.dart';
 import 'package:my_tractor/core/domain/use_case/sign_out.dart';
 import 'package:my_tractor/core/domain/use_case/update_user_data.dart';
@@ -25,5 +26,6 @@ void invokeDI() {
       signOut: SignOut(),
       getSpecificUserFromFirestore: GetSpecificUserFromFirestore(),
       updateUserData: UpdateUserData(),
-      getAllUsersFromFirestore: GetAllUsersFromFirestore()));
+      getAllUsersFromFirestore: GetAllUsersFromFirestore(),
+      listenToUserData: ListenToUserData()));
 }

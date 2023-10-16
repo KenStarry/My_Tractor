@@ -31,6 +31,9 @@ abstract class AuthRepository {
   /// Get User Data From Firebase
   Future<UserModel> getSpecificUserFromFirestore({String? uid});
 
+  /// Listen to User Document updates
+  Stream<DocumentSnapshot> listenToUserData({String? uid});
+
   /// Get All Users From Firestore
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFirestore();
 

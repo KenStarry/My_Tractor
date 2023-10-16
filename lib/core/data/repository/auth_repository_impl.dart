@@ -42,6 +42,18 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream authState() => auth.authStateChanges();
 
   @override
+  Stream<DocumentSnapshot> listenToUserData({String? uid}) {
+    try {
+      return firestore
+          .collection('Users')
+          .doc(uid ?? auth.currentUser!.uid)
+          .snapshots();
+    } on FirebaseAuthException catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  @override
   Future<UserModel> getSpecificUserFromFirestore({String? uid}) async {
 
     try {
