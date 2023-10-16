@@ -113,6 +113,22 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: Text("Home",
+              style: Theme.of(context).textTheme.titleMedium),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  await _authController.signOut();
+                },
+                icon: Icon(
+                  Icons.logout_rounded,
+                  color: Theme.of(context).primaryColor,
+                ))
+          ],
+        ),
         body: SafeArea(
           child: Column(
             children: [

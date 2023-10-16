@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:my_tractor/core/presentation/components/show_toast.dart';
 import 'package:my_tractor/core/presentation/controller/auth_controller.dart';
 import 'package:my_tractor/feature_tractor_owner_home/presentation/components/request_card.dart';
 
@@ -16,38 +18,16 @@ class TractorOwnerHome extends StatefulWidget {
 
 class _TractorOwnerHomeState extends State<TractorOwnerHome> {
   late final AuthController _authController;
+  late final FToast _toast;
 
   @override
   void initState() {
     super.initState();
 
     _authController = Get.find<AuthController>();
-  }
 
-  Future<Position> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied.');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied.');
-    }
-
-    //  get current device position
-    return await Geolocator.getCurrentPosition();
+    _toast = FToast();
+    _toast.init(context);
   }
 
   @override
@@ -70,7 +50,7 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
           }
 
           final user =
-          UserModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+              UserModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _authController.setUserModel(user: user);
@@ -95,11 +75,23 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
             ),
             floatingActionButton: FloatingActionButton.extended(
                 onPressed: () async {
+                  final currentPosition =
+                      await _authController.getCurrentLocation();
+
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showToast(
+                        toast: _toast,
+                        iconData: Icons.location_on_rounded,
+                        msg: 'Location shared successfully!');
+                  });
+
                   //  send live location to database
-                  await _authController.updateUserData(
-                      newUser:
-                          user.copyWith(latitude: 180.05, longitude: 190.5),
-                      uid: user.uid!);
+                  await _authController
+                      .updateUserData(
+                          newUser: user.copyWith(
+                              latitude: currentPosition.latitude,
+                              longitude: currentPosition.longitude),
+                          uid: user.uid!);
                 },
                 backgroundColor:
                     Theme.of(context).primaryColorDark.withOpacity(0.7),
@@ -140,7 +132,8 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                             )
                           : ListView.separated(
                               itemBuilder: (context, index) => RequestCard(
-                                  uid: user.acceptedRequests![index], isPending: false),
+                                  uid: user.acceptedRequests![index],
+                                  isPending: false),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(height: 8),
                               itemCount: user.acceptedRequests!.length),
@@ -148,14 +141,18 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                     Text("Pending",
                         style: Theme.of(context).textTheme.titleMedium),
                     Expanded(
-                      child: user.requests!.isEmpty ? const Center(
-                        child: Text("No pending requests"),
-                      ) : ListView.separated(
-                          itemBuilder: (context, index) =>
-                              RequestCard(uid: user.requests![index], isPending: true,),
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 8),
-                          itemCount: user.requests!.length),
+                      child: user.requests!.isEmpty
+                          ? const Center(
+                              child: Text("No pending requests"),
+                            )
+                          : ListView.separated(
+                              itemBuilder: (context, index) => RequestCard(
+                                    uid: user.requests![index],
+                                    isPending: true,
+                                  ),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 8),
+                              itemCount: user.requests!.length),
                     ),
                   ],
                 ),
