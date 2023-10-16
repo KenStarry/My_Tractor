@@ -144,7 +144,9 @@ class _TractorOwnerHomeState extends State<TractorOwnerHome> {
                     Text("Pending",
                         style: Theme.of(context).textTheme.titleMedium),
                     Expanded(
-                      child: ListView.separated(
+                      child: user.requests!.isEmpty ? const Center(
+                        child: Text("No pending requests"),
+                      ) : ListView.separated(
                           itemBuilder: (context, index) =>
                               RequestCard(uid: user.requests![index]),
                           separatorBuilder: (context, index) =>
